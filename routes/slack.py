@@ -7,14 +7,15 @@ class SlackResponse(object):
 
 	def to_dict(self):
 		return dict(
-			text=self.video_url
+			text=self.video_url,
+			response_type="in_channel"
 		)
 
 class SlackRequests(Resource):
 	def post(self):
 		parser = reqparse.RequestParser()
 		parser.add_argument("text", type=str)
-		
+
 		args = parser.parse_args()
 
 		search = youtube.Search(**args)
