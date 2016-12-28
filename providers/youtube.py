@@ -14,10 +14,10 @@ class Search(object):
 		api_response = youtube.search().list(
 			q=self.text,
 			type="video",
-			part="id",
+			part="id,snippet",
 			maxResults=1
 		).execute()
 
 		# Merge video ids
 		for r in api_response.get("items", []):
-			self.results.append("https://www.youtube.com/watch?v={}".format(r["id"]["videoId"]))
+			self.results.append((r["snippet"]["title"], "https://www.youtube.com/watch?v={}".format(r["id"]["videoId"])))
