@@ -46,5 +46,5 @@ class SlackRequests(Resource):
 			resp = SlackResponse("Sorry, I couldn't find anything for '{}'".format(search.text))
 			return resp.to_dict(), 200
 
-		resp = SlackResponse("I found this!", video_url=search.results[0][0], video_title=search.results[0][1])
+		resp = SlackResponse("I found this!", video_url=search.results[0][1], video_title=search.results[0][0])
 		return resp.to_dict(), 200
