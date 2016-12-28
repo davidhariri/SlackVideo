@@ -8,25 +8,12 @@ class SlackResponse(object):
 		self.video_url = video_url
 
 	def to_dict(self):
-		data = {
-			"text" : self.text,
+		return {
+			"text" : self.text + " " + self.video_url if self.video_url is not None else self.text,
 			"response_type" : "in_channel",
 			"unfurl_media" : True,
 			"unfurl_links" : True
 		}
-
-		if self.video_url:
-			data["attachments"] = [
-		        {
-					"title" : self.video_title,
-					"fallback": self.video_title,
-					"color": "#e62116",
-		            "title_link": self.video_url,
-					"footer": "From YouTube"
-				}
-		    ]
-
-		return data
 
 class SlackRequests(Resource):
 	def post(self):
