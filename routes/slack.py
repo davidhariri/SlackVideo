@@ -1,4 +1,5 @@
 from flask_restful import Resource, reqparse
+from providers import youtube
 
 class SlackResponse(object):
 	def __init__(self, video_url):
@@ -12,11 +13,13 @@ class SlackResponse(object):
 class SlackRequests(Resource):
 	def post(self):
 		parser = reqparse.RequestParser()
-
-		# parser.add_argument("comment", type=str, help="'comment' should be a string")
-
+		parser.add_argument("text", type=str)
+		
 		args = parser.parse_args()
 
-		resp = SlackResponse("Hello World")
+		search = youtube.Search(**args)
+		search.execute()
+
+		resp = SlackResponse(video_url=search.results[0])
 
 		return resp.to_dict(), 200
