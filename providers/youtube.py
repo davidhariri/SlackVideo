@@ -18,6 +18,5 @@ class Search(object):
 			maxResults=1
 		).execute()
 
-		# Merge video ids
 		for r in api_response.get("items", []):
 			self.results.append((r["snippet"]["title"], "https://www.youtube.com/watch?v={}".format(r["id"]["videoId"])))
