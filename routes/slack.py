@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 from providers import youtube
+import os
 
 
 class SlackResponse(object):
@@ -31,15 +32,26 @@ class SlackRequests(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("text", type=str)
+        parser.add_argument("token", type=str)
 
         args = parser.parse_args()
 
+        # Check the token from the requester
+        if args.get("token", "") != os.environ.get("SLACK_VERIFY_TOKEN"):
+            return "Invalid token", 400
+
+        search_text = args.get("text", "")
+
+        # Make the search
         try:
-            search = youtube.Search(**args)
+            search = youtube.Search(
+                text=search_text if len(search_text) else "rick roll"
+            )
+
             search.execute()
         except Exception:
             resp = SlackResponse(
-                "I'm temporarily unavailable. Try me again in a few minutes"
+                "Hm, try me again in a few minutes"
             )
 
             return resp.to_dict(), 200
